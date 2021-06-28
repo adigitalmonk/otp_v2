@@ -9,7 +9,7 @@ defmodule Repool.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Repool.Worker.start_link(arg)
-      # {Repool.Worker, arg}
+      {Repool.Server, "42"}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
