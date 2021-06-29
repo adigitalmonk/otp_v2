@@ -3,20 +3,24 @@ defmodule Repool.Server do
 
   alias Repool.Core, as: Counter
 
-  def inc(), do: GenServer.cast(:repool_counter, :inc)
+  def child_spec({initial, name}) do
+    %{id: name, start: {Repool.Server, :start_link, [{initial, name}]}}
+  end
 
-  def dec(), do: GenServer.cast(:repool_counter, :dec)
+  def inc(pid \\ :sara), do: GenServer.cast(pid, :inc)
 
-  def get(), do: GenServer.call(:repool_counter, :get)
+  def dec(pid \\ :sara), do: GenServer.cast(pid, :dec)
 
-  def boom(), do: GenServer.cast(:repool_counter, :boom)
+  def get(pid \\ :sara), do: GenServer.call(pid, :get)
 
-  def start_link(state) when is_binary(state) do
-    GenServer.start_link(__MODULE__, state, name: :repool_counter)
+  def boom(pid \\ :sara), do: GenServer.cast(pid, :boom)
+
+  def start_link({state, name}) when is_binary(state) do
+    GenServer.start_link(__MODULE__, state, name: name)
   end
 
   @impl true
-  def init(state), do: {:ok, Counter.new(state)}
+  def init(state), do: {:ok, Counter.new(state)} |> IO.inspect(label: :server)
 
   @impl true
   def handle_cast(:inc, state), do: {:noreply, Counter.add(state, 1)}
