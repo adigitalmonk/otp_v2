@@ -14,7 +14,7 @@ defmodule Breaker.Game do
   def new(answer \\ nil)
 
   def new(nil) do
-    new(Enum.map(1..4, fn _ -> Enum.random(1..8) end))
+    1..8 |> Enum.take_random(4) |> new()
   end
 
   def new(answer) when is_list(answer) do
@@ -31,8 +31,7 @@ defmodule Breaker.Game do
 
   def move(game_struct, _), do: game_struct
 
-  def humanize(%__MODULE__{answer: answer, move_history: [head | _rest]})
-      when head == answer do
+  def humanize(%__MODULE__{answer: answer, move_history: [answer | _rest]}) do
     "YOU WIN"
   end
 
@@ -41,12 +40,12 @@ defmodule Breaker.Game do
     "YOU LOSE"
   end
 
-  def humanize(%__MODULE__{answer: _answer, move_history: history}) do
+  def humanize(%__MODULE__{answer: answer, move_history: history}) do
     history
     |> Enum.map(fn _move ->
-      # move
-      # |> Score.new
-      # |> Score.covnert
+      move
+      |> Score.new(answer)
+      |> Score.humanize()
       # convert score with score function
       "Score would go here"
     end)
