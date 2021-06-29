@@ -20,6 +20,13 @@ defmodule Breaker.GameTest do
     assert history == [move2, move]
   end
 
+  test "Game history never exceeds the default limit" do
+    %Game{move_history: move_history} =
+      Enum.reduce(1..40, Game.new([1, 1, 1, 1]), fn _, acc -> Game.move(acc, [2, 2, 2, 2]) end)
+
+    assert 10 = length(move_history)
+  end
+
   test "Humanize returns Lose Status" do
     game =
       Enum.reduce(1..10, Game.new([1, 1, 1, 1]), fn _, acc -> Game.move(acc, [2, 2, 2, 2]) end)

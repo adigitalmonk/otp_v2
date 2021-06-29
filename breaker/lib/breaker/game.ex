@@ -24,18 +24,21 @@ defmodule Breaker.Game do
     }
   end
 
-  def move(%__MODULE__{move_history: history} = game_struct, move) when is_list(move) do
+  def move(%__MODULE__{move_history: history} = game_struct, move)
+      when is_list(move) and length(history) < @default_game_length do
     Map.put(game_struct, :move_history, [move | history])
   end
 
-  def humanize(%__MODULE__{move_history: history})
-      when length(history) > @default_game_length do
-    "YOU LOSE"
-  end
+  def move(game_struct, _), do: game_struct
 
   def humanize(%__MODULE__{answer: answer, move_history: [head | _rest]})
       when head == answer do
     "YOU WIN"
+  end
+
+  def humanize(%__MODULE__{move_history: history})
+      when length(history) >= @default_game_length do
+    "YOU LOSE"
   end
 
   def humanize(%__MODULE__{answer: _answer, move_history: history}) do
