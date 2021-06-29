@@ -1,5 +1,5 @@
 defmodule Breaker.Game do
-  # alias Breaker.Score
+  alias Breaker.Score
 
   defstruct [:answer, :move_history]
 
@@ -42,12 +42,14 @@ defmodule Breaker.Game do
 
   def humanize(%__MODULE__{answer: answer, move_history: history}) do
     history
-    |> Enum.map(fn _move ->
-      move
-      |> Score.new(answer)
-      |> Score.humanize()
+    |> Enum.map(fn move ->
+      score =
+        move
+        |> Score.new(answer)
+        |> Score.humanize()
+
       # convert score with score function
-      "Score would go here"
+      ~s/#{Enum.join(move, " | ")} : #{score}/
     end)
     |> Enum.join("\n")
   end
