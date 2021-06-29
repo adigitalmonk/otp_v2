@@ -10,7 +10,7 @@ defmodule Breaker.Game do
 
   @default_game_length 10
 
-  @spec new(list()) :: __MODULE__.t()
+  @spec new(list() | nil) :: t()
   def new(answer \\ nil)
 
   def new(nil) do
