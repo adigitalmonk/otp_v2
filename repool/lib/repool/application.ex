@@ -11,11 +11,12 @@ defmodule Repool.Application do
 
     children = [
       # Starts a worker by calling: Repool.Worker.start_link(arg)
-      {Repool.Server, {"0", :sara}},
-      {Repool.Server, {"1", :brad}},
-      {Repool.Server, {"42", :bruce}},
-      {Repool.Server, {"2", :jason}},
-      {Repool.Server, {"24", :kaleb}}
+      {DynamicSupervisor, strategy: :one_for_one, name: Repool.DynamicSupervisor}
+      # {Repool.Server, {"0", :sara}},
+      # {Repool.Server, {"1", :brad}},
+      # {Repool.Server, {"42", :bruce}},
+      # {Repool.Server, {"2", :jason}},
+      # {Repool.Server, {"24", :kaleb}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
