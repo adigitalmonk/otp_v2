@@ -11,13 +11,18 @@ defmodule Breaker.Game do
   @default_game_length 10
 
   @spec new(list() | nil) :: t()
-  def new(answer \\ nil)
+  def new(answer \\ nil, opts \\ [])
 
-  def new(nil) do
-    1..8 |> Enum.take_random(4) |> new()
+  def new(nil, opts) do
+    if opts[:duplicates] do
+      Enum.map(1..4, fn _ -> Enum.random(1..8) end)
+    else
+      Enum.take_random(1..8, 4)
+    end
+    |> new(opts)
   end
 
-  def new(answer) when is_list(answer) do
+  def new(answer, _opts) when is_list(answer) do
     %__MODULE__{
       answer: answer,
       move_history: []
