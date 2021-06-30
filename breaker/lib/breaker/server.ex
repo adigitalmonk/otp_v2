@@ -1,14 +1,14 @@
-defmodule Breaker do
+defmodule Breaker.Server do
   use GenServer
 
   alias Breaker.Game
 
-  def move(game \\ __MODULE__, move) do
-    GenServer.call(game, {:move, move}) |> IO.puts
+  def move(game, move) do
+    GenServer.call(game, {:move, move})
   end
 
   def start_link(answer \\ nil) do
-    GenServer.start_link(__MODULE__, answer, name: __MODULE__)
+    GenServer.start_link(__MODULE__, answer)
   end
 
   @impl true
