@@ -4,16 +4,17 @@ defmodule Breaker do
   alias Breaker.Game
 
   def move(game \\ __MODULE__, move) do
-    GenServer.call(game, {:move, move}) |> IO.puts
+    GenServer.call(game, {:move, move}) |> IO.puts()
   end
 
-  def start_link(answer \\ nil) do
-    GenServer.start_link(__MODULE__, answer, name: __MODULE__)
+  def start_link(opts) do
+    name = opts[:name] || __MODULE__
+    GenServer.start_link(__MODULE__, opts, name: name)
   end
 
   @impl true
-  def init(answer) do
-    {:ok, Game.new(answer)}
+  def init(opts) do
+    {:ok, Game.new(opts[:answer], opts)}
   end
 
   @impl true
